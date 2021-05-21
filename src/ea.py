@@ -14,7 +14,7 @@ from matplotlib.figure import Figure
 # local imports
 # import src.constants
 from src.utils import turn_coords_to_numpy
-from src.L_system import LSystem
+from src.lsystem.LSystem import LSystem
 from src.turtle import branching_turtle_to_coords
 
 
