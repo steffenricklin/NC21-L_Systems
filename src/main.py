@@ -29,7 +29,7 @@ def run(axiom, transformations, iterations, angle):
 
     # pass to EA
     ea = EA(system_zero, goal_img)
-    turtles = ea.runEvolutions(iterations)
+    turtles = ea.run_evolutions(iterations)
     # best = turtles.getBest(1)
     best = turtles[0].sequence
 
