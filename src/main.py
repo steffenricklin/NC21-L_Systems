@@ -8,12 +8,12 @@ from src.turtle import plot_coords, branching_turtle_to_coords
 from src.utils import turn_coords_to_numpy
 
 
-def run(axiom, transformations, iterations, angle):
+def run(axiom, transformations, iterations = 5, angle = 22.5, pop_size = 10, nr_gen=10, tournament_size =3):
     # goal parameters
     goal_axiom = 'A'
     goal_transformations = {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}
     goal_angle = 22.5
-    goal_system = LSystem(goal_axiom, goal_transformations, goal_angle)
+    goal_system = LSystem(goal_axiom, goal_transformations, goal_angle, iterations)
 
     iterations = 5
     goal_system.transform_multiple(iterations)
@@ -24,12 +24,17 @@ def run(axiom, transformations, iterations, angle):
     # ensure that it is not RGB anymore
     goal_img = np.reshape(goal_nump[:, :, 0], (480, 640, 1))
 
-    # init L-system
-    system_zero = LSystem(axiom, transformations, angle)
+    # init L-system ######Why should we start from just one ?
+    #system_zero = LSystem(axiom, transformations, angle)
+    params ={}
+    params["angle"] = angle
+    params["pop_size"] = pop_size
+    params["iterations"] = iterations
 
     # pass to EA
-    ea = EA(system_zero, goal_img)
-    turtles = ea.run_evolutions(iterations)
+    ea = EA( goal_img, params)
+    turtles = ea.run_evolutions(nr_gen)
+    print("finished")
     # best = turtles.getBest(1)
     best = turtles[0].sequence
 
@@ -38,7 +43,8 @@ def run(axiom, transformations, iterations, angle):
     plot_coords(coords, bare_plot=True)  # bare_plot removes the axis labels
 
 
-run()
+#run()
+
 
 
 def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
@@ -68,5 +74,7 @@ if __name__ == '__main__':
     transformations = {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}
     iterations = 5
     angle = 22.5
-
-    run(axiom, transformations, iterations, angle)
+    pop_size = 10
+    #a = LSystem(None, None, None, iterations, rand=True)
+    #a.show_image()
+    run(axiom, transformations, iterations,angle, pop_size = pop_size, nr_gen=3, tournament_size =3)

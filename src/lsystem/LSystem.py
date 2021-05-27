@@ -7,6 +7,7 @@ from PIL import Image
 import src.utils as utils
 import src.turtle as turtle
 import src.lsystem.mutations as mutate
+from src.constants import LETTER_STRING
 
 
 class LSystem:
@@ -15,11 +16,21 @@ class LSystem:
     the production rule strings
     """
 
-    def __init__(self, axiom, rules, angle):
-        self.axiom = axiom
-        self.transformations = rules
-        self.sequence = axiom
-        self.angle = angle
+    def __init__(self, axiom, rules, angle, iterations=5, rand=False):
+
+        if not rand:
+            self.axiom = axiom
+            self.transformations = rules
+            self.sequence = axiom
+            self.angle = angle
+            self.iterations = iterations
+
+        elif rand:
+            self.transformations =self.generate_random_rules()
+            self.axiom = list(self.transformations.keys())[0]
+            self.sequence = list(self.transformations.keys())[0]
+            self.angle = angle
+            self.iterations = iterations
 
     def evolve_transformations(self, p):
         """
@@ -57,7 +68,7 @@ class LSystem:
                 else:
                     pass
 
-        return self.transformations
+        #return self.transformations
 
     def transform_sequence(self):
         return ''.join(self.transformations.get(c, c) for c in self.sequence)
@@ -76,8 +87,7 @@ class LSystem:
         return self
 
     def to_coords(self):
-        axiom = list(self.transformations.keys())[0]
-        turtle_program = self.transform_multiple(axiom)
+        turtle_program = self.transform_multiple(self.iterations)
         coords = turtle.branching_turtle_to_coords(self.sequence, self.angle)
         return zip(*coords)
 
@@ -86,3 +96,35 @@ class LSystem:
         im_nump = utils.turn_coords_to_numpy(X, Y)
         img = Image.fromarray(im_nump, 'RGB')
         img.show()
+
+    def generate_random_rules(self):
+        '''
+        Generates a simple dictionary with L-system rules.
+        return: rules
+        '''
+        transformations = {}
+        nr_rules = random.randint(1, 4)
+        init_keys = "".join(random.choices(LETTER_STRING.upper(), k=nr_rules))
+
+        for key in init_keys:
+            if key not in transformations.keys():
+                self.generate_random_rule(key, init_keys, transformations)
+
+        return transformations
+
+    def generate_random_rule(self,key, auxi_characters, transformations):
+        '''
+        Generates simple, random rules containing the key and the characters from other keys
+        ,and characters like []+-
+        The rules are added to the dictionary
+        '''
+        nr_chars_left = random.randint(1, 3)
+        nr_chars_right = random.randint(1, 3)
+        rule = key + "".join(random.choices(key + auxi_characters + "+" + "-", k=nr_chars_right))
+        rule = "".join(random.choices(key + auxi_characters + "+" + "-", k=nr_chars_left)) + (rule)
+
+        transformations[key] = rule
+        # add branch with some probability
+        ind_branch =random.randint(0, 2)
+        if ind_branch < len(rule):
+            mutate.add_branch(transformations, key, ind_branch)

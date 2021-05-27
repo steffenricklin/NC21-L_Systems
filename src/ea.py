@@ -16,13 +16,15 @@ plt.style.use('bmh')  # Use some nicer default colors
 class EA:
     """
     """
-    def __init__(self, systems, goal_img):
+    def __init__(self, goal_img, population_params):
         self.goal_img = goal_img
-        if not isinstance(systems, list) and isinstance(systems, LSystem):
-            systems = [systems, ]
-        self.systems = systems
+        self.population = []
+        self.pop_size = population_params["pop_size"]
+        self.angle = population_params["angle"]
+        self.nr_iter = population_params["iterations"]
 
-    def run_evolutions(self, n_evol_steps, prob_mutation=0.75):
+
+    def run_evolutions(self, n_evol_steps, prob_mutation=0.75, tournament_size=3):
         """starts of with a given L-system / candidate solution.
         - evaluates the quality of each candidate
         - then repeats until termination condition is satisfied:
@@ -31,28 +33,35 @@ class EA:
         - evaluate new candidates
         - select candidates for the next generation
         """
-        # evaluate initial system(s)
-        fitnesses = [self.get_fitness(system) for system in self.systems]
+        best_fit = []
+        for mu in range(self.pop_size):
+            self.population.append(LSystem(None, None, None, self.nr_iter, rand=True))
 
-        for step in range(n_evol_steps):
-            # select candidate solution
-            # self.systems = self.selectCandidates()  # TODO
+        # simulate evolution
+        for gen in range(n_evol_steps):
+            print("generation ",gen)
+            # ?select random pairs
+            # ?cross over
+            # Some plants can grow offspring from their own roots: cloning
+            # so who needs cross over anyway
 
-            # mutate candidates
-            for i, system in enumerate(self.systems):
-                system.evolve_transformations(prob_mutation)
-                self.systems[i] = system
+            # mutations
+            children = self.population.copy()
 
-            # evaluate the mutated candidates
-            fitnesses = [self.get_fitness(system) for system in self.systems]
+            for nr, child in enumerate(children):
+                child.evolve_transformations(prob_mutation)
 
-            # select candidates for next generation
-            # self.systems = self.selectCandidates() # TODO
-        return self.systems
+            self.population.extend(children)
+
+            # select new generaton
+
+            self.population = self.run_tournament_selection(self.population, self.goal_img, tournament_size, self.pop_size)
+            children.clear()
+        return self.population
 
     def get_fitness(self, system, method='hu'):
         if method == 'hu':
-            X, Y = branching_turtle_to_coords(system.sequence)
+            #X, Y = branching_turtle_to_coords(system.sequence)
             return self.calculate_hu_fitness(X, Y, self.goal_img)
         else:
             raise NotImplementedError
@@ -77,9 +86,11 @@ class EA:
         selected = []
 
         # compute the fitness for each candidate
+        print("start selection")
         coords_list = [system.to_coords() for system in population]
+        print("yeah")
         fitness_list = [self.calculate_fitness(coordinate, optimal) for coordinate in coords_list]
-
+        print("fit for free",fitness_list[0])
         # run several tournaments, until there are enough candidates selected to replace the population
         while len(selected) < size_pop:
             # choose some random candidates from the population
@@ -93,3 +104,4 @@ class EA:
             selected.append(population[winner_ind])
 
         return selected
+

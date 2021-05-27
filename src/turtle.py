@@ -12,7 +12,7 @@ def branching_turtle_to_coords(turtle_program, angle=45):
     state = (0, 0, 90)
     yield (0, 0)
 
-    print('turtle', turtle_program)
+    #print('turtle', turtle_program)
 
     for command in turtle_program:
         x, y, angle = state
