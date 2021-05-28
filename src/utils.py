@@ -27,4 +27,3 @@ def turn_coords_to_numpy(X, Y):
     image = image.reshape(fig.canvas.get_width_height()[::-1] + (3,))
     
     return image
-

@@ -63,11 +63,15 @@ def remove_branch_left(transformations, key, index_left):
     """
     list_conversion = list(transformations[key])
     # index_right = string_conversion.find(']')
-    index_right = list_conversion.index(']')
+
+    # we need to add the index from where it starts searching for the right bracket to the result
+    start_index_right = len(transformations[key][:index_left])
+    index_right = start_index_right + transformations[key][index_left:].index(']')
+    # print(index_left, index_right)
 
     # remove the brackets
-    list_conversion[index_left] = ''
     list_conversion[index_right] = ''
+    list_conversion[index_left] = ''
 
     transformations[key] = "".join(list_conversion)
     return transformations
@@ -79,7 +83,9 @@ def remove_branch_right(transformations, key, index_right):
     """
     list_conversion = list(transformations[key])
     # index_left = string_conversion.find('[')
-    index_left = list_conversion.index('[')
+
+    index_left = transformations[key].index('[')
+    print(index_left, index_right)
 
     # remove the brackets
     list_conversion[index_right] = ''
@@ -98,14 +104,14 @@ def add_branch(transformations, key, index_left):
     Adds a new pair of brackets, starting at index given as the parameter, and ending at a random index
     within the string, right to the start of the branch
     """
-    if index_left < len(transformations[key]):  # <= if empty branches allowed
+    if index_left <= len(transformations[key]):  # <= if empty branches allowed
         list_conversion = list(transformations[key])
         list_conversion.insert(index_left, "[")
 
-        index_right = np.random.randint(index_left + 2, len(transformations[key]) + 2)
+        index_right =  np.random.randint(index_left+1, len(transformations[key])+2)
         # in case empty branches are allowed index+1
 
-        list_conversion.insert(index_right, "]")
+        list_conversion.insert(index_right,"]")
 
         transformations[key] = "".join(list_conversion)
         return transformations
@@ -124,13 +130,13 @@ def remove_plus_minus(transformations, key, index):
     return transformations
 
 
-def add_plus_minus(self, transformations, key, index):
+def add_plus_minus(transformations, key, index):
     """
     add a plus or a minus
     """
     list_conversion = list(transformations[key])
 
-    list_conversion.insert(index + 1, random.choice(["+", "-"]))
+    list_conversion.insert(index+1, random.choice(["+", "-"]))
 
     transformations[key] = "".join(list_conversion)
     return transformations

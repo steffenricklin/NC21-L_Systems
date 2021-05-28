@@ -8,31 +8,27 @@ from src.turtle import plot_coords, branching_turtle_to_coords
 from src.utils import turn_coords_to_numpy
 
 
-def run(axiom, transformations, iterations = 5, angle = 22.5, pop_size = 10, nr_gen=10, tournament_size =3):
+def run(axiom, transformations, iterations=5, angle=22.5, pop_size=10, nr_gen=10, tournament_size=3):
     # goal parameters
     goal_axiom = 'A'
     goal_transformations = {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}
     goal_angle = 22.5
     goal_system = LSystem(goal_axiom, goal_transformations, goal_angle, iterations)
 
-    iterations = 5
     goal_system.transform_multiple(iterations)
 
     coords_g = branching_turtle_to_coords(goal_system.sequence, angle)
-    X, Y = zip(*coords_g)
-    goal_nump = turn_coords_to_numpy(X, Y)
+    x, y = zip(*coords_g)
+    goal_nump = turn_coords_to_numpy(x, y)
     # ensure that it is not RGB anymore
     goal_img = np.reshape(goal_nump[:, :, 0], (480, 640, 1))
 
     # init L-system ######Why should we start from just one ?
-    #system_zero = LSystem(axiom, transformations, angle)
-    params ={}
-    params["angle"] = angle
-    params["pop_size"] = pop_size
-    params["iterations"] = iterations
+    # system_zero = LSystem(axiom, transformations, angle)
+    params = {"angle": angle, "pop_size": pop_size, "iterations": iterations}
 
     # pass to EA
-    ea = EA( goal_img, params)
+    ea = EA(goal_img, params)
     turtles = ea.run_evolutions(nr_gen)
     print("finished")
     # best = turtles.getBest(1)
@@ -43,31 +39,6 @@ def run(axiom, transformations, iterations = 5, angle = 22.5, pop_size = 10, nr_
     plot_coords(coords, bare_plot=True)  # bare_plot removes the axis labels
 
 
-#run()
-
-
-
-def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
-    lsystem = LSystem(axiom, transformations, angle)
-    turtle_program = lsystem.transform_multiple_evolve(iterations, p)
-    coords = branching_turtle_to_coords(turtle_program, angle)
-    plot_coords(coords, bare_plot=True)  # bare_plot removes the axis labels
-
-
-def l_plot(axiom, transformations, iterations=0, angle=45.):
-    lsystem = LSystem(axiom, transformations, angle)
-    turtle_program = lsystem.transform_multiple(iterations)
-    coords = branching_turtle_to_coords(turtle_program, angle)
-    plot_coords(coords, bare_plot=True)  # bare_plot removes the axis labels
-
-
-def main():
-    # l_plot_evolve('A', {'F': ['F', 'F'], 'A': ['F', '[', '+', 'A', 'F', '-', '[', 'A', ']', '-', '-', 'A', ']', '[', '-', '-', '-', 'A', ']']}, 5, 22.5)
-    l_plot_evolve('A', {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}, 5, 22.5)
-
-    l_plot('A', {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}, 5, 22.5)
-
-
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     axiom = 'A'
@@ -75,6 +46,28 @@ if __name__ == '__main__':
     iterations = 5
     angle = 22.5
     pop_size = 10
-    #a = LSystem(None, None, None, iterations, rand=True)
-    #a.show_image()
-    run(axiom, transformations, iterations,angle, pop_size = pop_size, nr_gen=3, tournament_size =3)
+    # a = LSystem(None, None, None, iterations, rand=True)
+    # a.show_image()
+
+    run(axiom, transformations, iterations, angle, pop_size=pop_size, nr_gen=3, tournament_size=3)
+
+
+# def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
+#     lsystem = LSystem(axiom, transformations, angle)
+#     turtle_program = lsystem.transform_multiple_evolve(iterations, p)
+#     coords = branching_turtle_to_coords(turtle_program, angle)
+#     plot_coords(coords, bare_plot=True)  # bare_plot removes the axis labels
+#
+#
+# def l_plot(axiom, transformations, iterations=0, angle=45.):
+#     lsystem = LSystem(axiom, transformations, angle)
+#     turtle_program = lsystem.transform_multiple(iterations)
+#     coords = branching_turtle_to_coords(turtle_program, angle)
+#     plot_coords(coords, bare_plot=True)  # bare_plot removes the axis labels
+#
+#
+# def main():
+#     # l_plot_evolve('A', {'F': ['F', 'F'], 'A': ['F', '[', '+', 'A', 'F', '-', '[', 'A', ']', '-', '-', 'A', ']', '[', '-', '-', '-', 'A', ']']}, 5, 22.5)
+#     l_plot_evolve('A', {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}, 5, 22.5)
+#
+#     l_plot('A', {'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'}, 5, 22.5)

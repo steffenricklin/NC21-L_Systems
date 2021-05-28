@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 from src.constants import LETTER_STRING, DEGREES_TO_RADIANS
 
 
-def branching_turtle_to_coords(turtle_program, angle=45):
+def branching_turtle_to_coords(turtle_program, turn_amount=45):
     saved_states = list()
     state = (0, 0, 90)
-    yield (0, 0)
+    yield 0, 0
 
     #print('turtle', turtle_program)
 
@@ -18,9 +18,18 @@ def branching_turtle_to_coords(turtle_program, angle=45):
         x, y, angle = state
 
         if command.lower() in LETTER_STRING:  # Move forward (matches a-j and A-J)
+            # try:
             state = (x - cos(angle * DEGREES_TO_RADIANS),
                      y + sin(angle * DEGREES_TO_RADIANS),
                      angle)
+            # except OverflowError as err:
+            #     print("x: ", type(x), x)
+            #     print("D: ", type(DEGREES_TO_RADIANS), DEGREES_TO_RADIANS)
+            #     print("a: ", type(angle), angle)
+            #     print(state)
+            #     print(err)
+            #     raise
+            # print(state)
 
             if command.islower():  # Add a break in the line if command matches a-j
                 yield float('nan'), float('nan')
@@ -28,10 +37,10 @@ def branching_turtle_to_coords(turtle_program, angle=45):
             yield state[0], state[1]
 
         elif command == '+':  # Turn clockwise
-            state = (x, y, angle + angle)
+            state = (x, y, angle + turn_amount)
 
         elif command == '-':  # Turn counterclockwise
-            state = (x, y, angle - angle)
+            state = (x, y, angle - turn_amount)
 
         elif command == '[':  # Remember current state
             saved_states.append(state)
