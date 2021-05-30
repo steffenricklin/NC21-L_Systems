@@ -20,7 +20,7 @@ class EA:
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
 
-    def run_evolutions(self, n_evol_steps, prob_mutation=0.75, tournament_size=3):
+    def run_evolutions(self, n_evol_steps, prob_mutation=0.75, tournament_size=1):
         """starts of with a given L-system / candidate solution.
         - evaluates the quality of each candidate
         - then repeats until termination condition is satisfied:
@@ -46,7 +46,6 @@ class EA:
 
             for nr, child in enumerate(children):
                 child.mutate_transformations(prob_mutation)
-
             self.population.extend(children)
 
             # select new generaton
@@ -68,7 +67,12 @@ class EA:
 
         # compute the fitness for each candidate
         print("start tournament selection")
-        coords_list = [system.to_coords() for system in population]
+        coords_list = []
+        for nr, system in enumerate(population):
+            print("number of system", nr)
+            system.printSystem()
+            coords_list.append(system.to_coords())
+        #coords_list = [system.to_coords() for system in population]
         print(" - calculate hu fitness")
         fitness_list = [calculate_hu_fitness(coordinate, optimal) for coordinate in coords_list]
         print(" - fit for free", fitness_list[0])

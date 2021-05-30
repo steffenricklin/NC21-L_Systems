@@ -30,14 +30,12 @@ class LSystem:
         if not rand:
             self.axiom = axiom
             self.transformations = rules
-            self.sequence = axiom
             self.angle = angle
             self.iterations = iterations
 
         elif rand:
             self.transformations = self.generate_random_rules()
             self.axiom = list(self.transformations.keys())[0]
-            self.sequence = list(self.transformations.keys())[0]
             self.angle = angle
             self.iterations = iterations
 
@@ -83,23 +81,23 @@ class LSystem:
                         self.transformations = mutate.remove_plus_minus(self.transformations, key, index)
                     else:
                         pass
-        return self.transformations
+        #return self.transformations
 
     def transform_sequence(self):
-        return ''.join(self.transformations.get(c, c) for c in self.sequence)
+        return ''.join(self.transformations.get(c, c) for c in self.axiom)
 
     def transform_multiple_evolve(self, iterations, p):
         """Tranforms for multiple iterations"""
         for _ in range(iterations):
             self.mutate_transformations(p)
-            self.sequence = self.transform_sequence()
-        return self.sequence
+            sequence = self.transform_sequence()
+        return sequence
 
     def transform_multiple(self, iterations):
         """Tranforms for multiple iterations"""
         for _ in range(iterations):
-            self.sequence = self.transform_sequence()
-        return self.sequence
+            sequence = self.transform_sequence()
+        return sequence
 
     def to_coords(self):
         sequence = self.transform_multiple(self.iterations)
@@ -124,11 +122,11 @@ class LSystem:
 
         for key in init_keys:
             if key not in transformations.keys():
-                self.generate_random_rule(key, init_keys, transformations)
+                self.generate_random_rule_set(key, init_keys, transformations)
 
         return transformations
 
-    def generate_random_rule(self, key, auxi_characters, transformations):
+    def generate_random_rule_set(self, key, auxi_characters, transformations):
         """Generates simple, random rules containing the key and the characters from other keys and characters like []+-
         The rules are added to the dictionary
 
@@ -153,3 +151,7 @@ class LSystem:
             return calculate_hu_fitness(self.to_coords(), optimal)
         else:
             raise NotImplementedError
+
+    def printSystem(self):
+        print("axiom:", self.axiom)
+        print("rules:", self.transformations)
