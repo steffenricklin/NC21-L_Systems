@@ -17,7 +17,7 @@ def point_mutation_transformation(transformations, key):
     old_letter = random.choice(LETTER_STRING).upper()
     # old_letter = transformations[key]
     new_letter = random.choice(LETTER_STRING).upper()
-    print(old_letter, new_letter)
+    # print(old_letter, new_letter)
 
     # point mutation-like change of transformation rules
     old_transformation = transformations[key]
@@ -85,7 +85,7 @@ def remove_branch_right(transformations, key, index_right):
     # index_left = string_conversion.find('[')
 
     index_left = transformations[key].index('[')
-    print(index_left, index_right)
+    # print(index_left, index_right)
 
     # remove the brackets
     list_conversion[index_right] = ''

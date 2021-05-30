@@ -28,8 +28,8 @@ class LSystem:
         :param rand:
         """
         if not rand:
-            self.axiom = axiom
             self.transformations = rules
+            self.axiom = axiom
             self.angle = angle
             self.iterations = iterations
 
@@ -87,14 +87,14 @@ class LSystem:
         return ''.join(self.transformations.get(c, c) for c in self.axiom)
 
     def transform_multiple_evolve(self, iterations, p):
-        """Tranforms for multiple iterations"""
+        """Transforms for multiple iterations"""
         for _ in range(iterations):
             self.mutate_transformations(p)
             sequence = self.transform_sequence()
         return sequence
 
     def transform_multiple(self, iterations):
-        """Tranforms for multiple iterations"""
+        """Transforms for multiple iterations"""
         for _ in range(iterations):
             sequence = self.transform_sequence()
         return sequence

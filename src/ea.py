@@ -3,6 +3,7 @@
 # general imports
 import matplotlib.pyplot as plt
 import random
+import copy
 # local imports
 from src.lsystem.LSystem import LSystem
 from src.fitness import calculate_hu_fitness
@@ -13,6 +14,7 @@ plt.style.use('bmh')  # Use some nicer default colors
 class EA:
     """
     """
+
     def __init__(self, goal_img, population_params):
         self.goal_img = goal_img
         self.population = []
@@ -20,7 +22,7 @@ class EA:
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
 
-    def run_evolutions(self, n_evol_steps, prob_mutation=0.75, tournament_size=1):
+    def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=1):
         """starts of with a given L-system / candidate solution.
         - evaluates the quality of each candidate
         - then repeats until termination condition is satisfied:
@@ -29,12 +31,12 @@ class EA:
         - evaluate new candidates
         - select candidates for the next generation
         """
-        best_fit = []
         for mu in range(self.pop_size):
             self.population.append(LSystem(None, None, 45, self.nr_iter, rand=True))
 
         # simulate evolution
-        for gen in range(n_evol_steps):
+        fitness_population = None
+        for gen in range(n_gens):
             print("generation ", gen)
             # ?select random pairs
             # ?cross over
@@ -42,18 +44,19 @@ class EA:
             # so who needs cross over anyway
 
             # mutations
-            children = self.population.copy()
+            children = copy.deepcopy(self.population)
 
             for nr, child in enumerate(children):
                 child.mutate_transformations(prob_mutation)
             self.population.extend(children)
 
-            # select new generaton
+            # select new generation
 
-            self.population = self.run_tournament_selection(self.population, self.goal_img, tournament_size,
-                                                            self.pop_size)
+            self.population, fitness_population = self.run_tournament_selection(self.population, self.goal_img,
+                                                                                tournament_size,
+                                                                                self.pop_size)
             children.clear()
-        return self.population
+        return self.population, fitness_population
 
     def run_tournament_selection(self, population, optimal, tournament_size, size_pop):
         """
@@ -64,18 +67,18 @@ class EA:
       """
 
         selected = []
+        fitness_selected = []
 
         # compute the fitness for each candidate
-        print("start tournament selection")
+        # print("start tournament selection")
         coords_list = []
         for nr, system in enumerate(population):
-            print("number of system", nr)
-            system.printSystem()
+            # print("number of system", nr)
+            # system.printSystem()
             coords_list.append(system.to_coords())
-        #coords_list = [system.to_coords() for system in population]
-        print(" - calculate hu fitness")
         fitness_list = [calculate_hu_fitness(coordinate, optimal) for coordinate in coords_list]
-        print(" - fit for free", fitness_list[0])
+        # print(" - fit for free", fitness_list[0])
+
         # run several tournaments, until there are enough candidates selected to replace the population
         while len(selected) < size_pop:
             # choose some random candidates from the population
@@ -87,5 +90,6 @@ class EA:
 
             # add the best solution
             selected.append(population[winner_ind])
+            fitness_selected.append(fitness_list[winner_ind])
 
-        return selected
+        return selected, fitness_selected
