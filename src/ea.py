@@ -52,7 +52,8 @@ class EA:
 
             # select new generation
 
-            self.population, fitness_population = self.run_tournament_selection(self.population, self.goal_img,
+            self.population, fitness_population = self.run_tournament_selection(self.population,
+                                                                                self.goal_img,
                                                                                 tournament_size,
                                                                                 self.pop_size)
             children.clear()
@@ -74,7 +75,7 @@ class EA:
         coords_list = []
         for nr, system in enumerate(population):
             # print("number of system", nr)
-            # system.printSystem()
+            # print(system)
             coords_list.append(system.to_coords())
         fitness_list = [calculate_hu_fitness(coordinate, optimal) for coordinate in coords_list]
         # print(" - fit for free", fitness_list[0])

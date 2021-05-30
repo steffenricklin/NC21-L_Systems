@@ -1,10 +1,7 @@
 # general imports
-import numpy as np
-
 # local imports
 from src.ea import EA
-from src.lsystem.LSystem import LSystem
-from src.turtle import plot_coords, branching_turtle_to_coords
+from src.lsystem.LSystem import define_goal
 import src.utils as utils
 
 
@@ -17,18 +14,6 @@ def run(goal, params):
     utils.show_results(turtles, fitness_turtles, params)
 
 
-def get_goal(axiom, transformations, angle, iterations):
-    goal_system = LSystem(axiom, transformations, angle, iterations)
-    goal_sequence = goal_system.transform_multiple(iterations)
-
-    coords_g = branching_turtle_to_coords(goal_sequence, angle)
-    x, y = zip(*coords_g)
-    goal_numpy = utils.turn_coords_to_numpy(x, y)
-    # ensure that it is not RGB anymore
-    goal = np.reshape(goal_numpy[:, :, 0], (480, 640, 1))
-    return goal
-
-
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
@@ -39,13 +24,13 @@ if __name__ == '__main__':
                   "tournament_size": 3}
 
     # define the goal parameters
-    goal_img = get_goal(axiom='A',
-                        transformations={'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'},
-                        angle=parameters["angle"],
-                        iterations=parameters["iterations"])
+    goal = define_goal(axiom='A',
+                       transformations={'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'},
+                       angle=parameters["angle"],
+                       iterations=parameters["iterations"])
 
     # simulate
-    run(goal_img, parameters)
+    run(goal, parameters)
 
 # def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
 #     lsystem = LSystem(axiom, transformations, angle)

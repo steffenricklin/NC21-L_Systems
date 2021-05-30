@@ -12,13 +12,25 @@ from src.fitness import calculate_hu_fitness
 from src.constants import LETTER_STRING
 
 
+def define_goal(axiom, transformations, angle, iterations):
+    goal_system = LSystem(axiom, transformations, angle, iterations)
+    goal_sequence = goal_system.transform_multiple(iterations)
+
+    coords_g = turtle.branching_turtle_to_coords(goal_sequence, angle)
+    x, y = zip(*coords_g)
+    goal_numpy = utils.turn_coords_to_numpy(x, y)
+    # ensure that it is not RGB anymore
+    goal = np.reshape(goal_numpy[:, :, 0], (480, 640, 1))
+    return goal
+
+
 class LSystem:
     """
     Represents the production rules and provides functions for changing
     the production rule strings
     """
 
-    def __init__(self, axiom, rules, angle, iterations=5, rand=False):
+    def __init__(self, axiom, rules, angle, iterations, rand=False):
         """
 
         :param axiom:
@@ -81,13 +93,13 @@ class LSystem:
                         self.transformations = mutate.remove_plus_minus(self.transformations, key, index)
                     else:
                         pass
-        #return self.transformations
 
     def transform_sequence(self):
         return ''.join(self.transformations.get(c, c) for c in self.axiom)
 
     def transform_multiple_evolve(self, iterations, p):
         """Transforms for multiple iterations"""
+        sequence = None
         for _ in range(iterations):
             self.mutate_transformations(p)
             sequence = self.transform_sequence()
@@ -95,6 +107,7 @@ class LSystem:
 
     def transform_multiple(self, iterations):
         """Transforms for multiple iterations"""
+        sequence = None
         for _ in range(iterations):
             sequence = self.transform_sequence()
         return sequence
@@ -152,6 +165,8 @@ class LSystem:
         else:
             raise NotImplementedError
 
-    def printSystem(self):
-        print("axiom:", self.axiom)
-        print("rules:", self.transformations)
+    # def __str__(self):
+    #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
+
+    def __repr__(self):
+        return f"LSystem(axiom={self.axiom}, angle={self.angle}, rules={self.transformations})"
