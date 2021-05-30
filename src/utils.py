@@ -39,5 +39,5 @@ def show_results(l_systems, fitness_turtles, params):
         print("\t- axiom:   ", system.axiom)
         print("\t- t.-rules:", system.transformations)
         print("\t- fitness: ", fitness_turtles[i])
-    best_turtle = l_systems[min(range(len(l_systems)), key=lambda x: fitness_turtles[x])]
-    print(f"Best system is system #{best_turtle}")
+    idx_best_turtle = min(range(len(l_systems)), key=lambda x: fitness_turtles[x])
+    print(f"Best system is system #{idx_best_turtle}")
