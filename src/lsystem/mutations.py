@@ -5,43 +5,9 @@ import numpy as np
 from src.constants import LETTER_STRING
 
 
-def point_mutation_transformation(transformations, key):
-    """
-    change the value of a transformation based on letter
-
-    In this function we can add evolution strategies.
-    I've just added a very simple evolutionary strategy that is not very stochastic or good.
-    It just replaces the value of the first key with 'FA'
-    """
-    # generate the letter that we want to change and the letter to replace it with
-    old_letter = random.choice(LETTER_STRING).upper()
-    # old_letter = transformations[key]
-    new_letter = random.choice(LETTER_STRING).upper()
-    # print(old_letter, new_letter)
-
-    # point mutation-like change of transformation rules
-    old_transformation = transformations[key]
-
-    # replace by other letter(s) random duplication
-    # transformations[key] = old_transformation.replace(old_letter, random.randint(0,4)*new_letter) #CHANGE HERE
-
-    # replace by other letter(s) for random amount of times with random duplication
-    nr_letter = old_transformation.count(old_letter)
-    transformations[key] = old_transformation.replace(old_letter, random.randint(0, 4) * new_letter,
-                                                      random.randint(0, nr_letter))  # CHANGE HERE
-
-    # remove all old_letter values
-    # transformations[key] = old_transformation.replace(old_letter, '') #CHANGE HERE
-
-    # if a new letter is added to the dict values that is not already a key, add it to the dict
-    if new_letter not in transformations:
-        transformations[new_letter] = transformations[key] * 3  # CHANGE HERE
-    return transformations
-
-
 def change_letter(transformations, key, index):
     """
-    the key is a letter
+    The character at transformations[key][index] is a letter
     """
     new_letter = random.choice(LETTER_STRING).upper()
 
@@ -53,12 +19,13 @@ def change_letter(transformations, key, index):
 
     # if a new letter is added to the dict values that is not already a key, add it to the dict
     if new_letter not in transformations:
-        transformations[new_letter] = transformations[key] * 3  # CHANGE HERE
+        transformations[new_letter] = transformations[key]  # CHANGE HERE
     return transformations
 
 
 def remove_branch(transformations, key, index, is_open_bracket):
     """
+    The character at transformations[key][index] is a bracket
     Removes a branch in a transformation rule.
     """
     list_conversion = list(transformations[key])
@@ -80,44 +47,6 @@ def remove_branch(transformations, key, index, is_open_bracket):
 
     list_conversion[index] = ''
     list_conversion[index_2] = ''
-
-    transformations[key] = "".join(list_conversion)
-    return transformations
-
-
-def remove_branch_left(transformations, key, index_left):
-    """
-    the key is a left bracket
-    """
-    list_conversion = list(transformations[key])
-    # index_right = string_conversion.find(']')
-
-    # we need to add the index from where it starts searching for the right bracket to the result
-    start_index_right = len(transformations[key][:index_left])
-    index_right = start_index_right + transformations[key][index_left:].index(']')
-    # print(index_left, index_right)
-
-    # remove the brackets
-    list_conversion[index_right] = ''
-    list_conversion[index_left] = ''
-
-    transformations[key] = "".join(list_conversion)
-    return transformations
-
-
-def remove_branch_right(transformations, key, index_right):
-    """
-    the key is a right bracket
-    """
-    list_conversion = list(transformations[key])
-    # index_left = string_conversion.find('[')
-
-    index_left = transformations[key].index('[')
-    # print(index_left, index_right)
-
-    # remove the brackets
-    list_conversion[index_right] = ''
-    list_conversion[index_left] = ''
 
     transformations[key] = "".join(list_conversion)
     return transformations
@@ -147,7 +76,8 @@ def add_branch(transformations, key, index_left):
 
 def remove_plus_minus(transformations, key, index):
     """
-    the key is a plus or minus, remove the character
+    The character at transformations[key][index] is a plus or minus,
+    Removes the character
     """
     list_conversion = list(transformations[key])
 
