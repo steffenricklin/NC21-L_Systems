@@ -119,11 +119,14 @@ class LSystem:
         coords = turtle.branching_turtle_to_coords(sequence, self.angle)
         return zip(*coords)
 
-    def show_image(self):
-        x, y = self.to_coords()
-        im_nump = utils.turn_coords_to_numpy(x, y)
-        img = Image.fromarray(im_nump, 'RGB')
-        img.show()
+    def show_image(self, title=""):
+        seq = self.transform_multiple(self.iterations)
+        xy = turtle.branching_turtle_to_coords(seq, self.angle)
+        turtle.plot_coords(xy, title, bare_plot=True)
+        # x, y = self.to_coords()
+        # im_nump = utils.turn_coords_to_numpy(x, y)
+        # img = Image.fromarray(im_nump, 'RGB')
+        # img.show()
 
     def generate_random_rules(self):
         """

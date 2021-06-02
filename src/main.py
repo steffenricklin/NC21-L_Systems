@@ -6,7 +6,7 @@ import src.utils as utils
 
 
 def run(goal_system, goal, params):
-    goal_system.show_image("Goal system")
+    goal_system.show_image(f"Goal system, iterations={str(goal_system.iterations)}")
     # pass to EA
     ea = EA(goal, params)
     turtles, fitness_turtles = ea.run_evolutions(params["nr_gens"], tournament_size=params["tournament_size"])
@@ -19,10 +19,10 @@ if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
-                  "pop_size": 25,
-                  "iterations": 5,
-                  "nr_gens": 100,
-                  "tournament_size": 5}
+                  "pop_size": 3,
+                  "iterations": 3,
+                  "nr_gens": 1,
+                  "tournament_size": 2}
 
     # define the goal parameters
     goal_system, goal = define_goal(axiom='A',

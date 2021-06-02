@@ -43,7 +43,7 @@ def branching_turtle_to_coords(turtle_program, turn_amount=45):
             yield x, y
 
 
-def plot_coords(coords, bare_plot=False):
+def plot_coords(coords, title, bare_plot=False):
     if bare_plot:
         # Turns off the axis markers.
         plt.axis('off')
@@ -54,4 +54,5 @@ def plot_coords(coords, bare_plot=False):
     X, Y = zip(*coords)
     # Draws the plot.
     plt.plot(X, Y)
+    plt.title(title)
     plt.show()
