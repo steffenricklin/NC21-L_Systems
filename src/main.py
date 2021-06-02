@@ -5,7 +5,6 @@ from src.lsystem.LSystem import define_goal
 import src.utils as utils
 
 
-
 def run(goal, params):
     # pass to EA
     ea = EA(goal, params)
@@ -13,6 +12,7 @@ def run(goal, params):
     print("finished")
 
     utils.show_results(turtles, fitness_turtles, params)
+
 
 if __name__ == '__main__':
     # execute only if run as the entry point into the program

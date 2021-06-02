@@ -9,7 +9,7 @@ import src.utils as utils
 import src.turtle as turtle
 import src.lsystem.mutations as mutate
 from src.fitness import calculate_hu_fitness
-from src.constants import LETTER_STRING
+from src.constants import LETTER_STRING, debug
 
 
 def define_goal(axiom, transformations, angle, iterations):
@@ -86,9 +86,11 @@ class LSystem:
 
                     # remove existing characters
                     elif value == '[':
-                        self.transformations = mutate.remove_branch_left(self.transformations, key, index)
+                        self.transformations = mutate.remove_branch(self.transformations, key, index,
+                                                                    is_open_bracket=True)
                     elif value == ']':
-                        self.transformations = mutate.remove_branch_right(self.transformations, key, index)
+                        self.transformations = mutate.remove_branch(self.transformations, key, index,
+                                                                    is_open_bracket=False)
                     elif value == '+' or value == '-':
                         self.transformations = mutate.remove_plus_minus(self.transformations, key, index)
                     else:
@@ -167,6 +169,28 @@ class LSystem:
 
     # def __str__(self):
     #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
+
+    def verify_system(self, msg=""):
+        """
+        Checks whether a sequence is correct.
+        1. closing brackets must come after opening brackets
+        """
+
+        if debug:
+            sequence = self.transform_multiple(self.iterations)
+            bracket_balance = 0
+            for character in sequence:
+                if character == '[':
+                    bracket_balance += 1
+                elif character == ']':
+                    bracket_balance -= 1
+                if bracket_balance < 0:
+                    print(f"Resulting sequence of system is faulty:\n"
+                                     f"\t- bracket_balance: {bracket_balance}\n"
+                                     f"\t- axiom: {self.axiom}\n"
+                                     f"\t- rules: {self.transformations}\n"
+                                     f"\t- sequ.: {sequence}"+msg)
+                    raise ValueError
 
     def __repr__(self):
         return f"LSystem(axiom={self.axiom}, angle={self.angle}, rules={self.transformations})"
