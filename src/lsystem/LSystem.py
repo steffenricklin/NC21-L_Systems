@@ -9,7 +9,7 @@ import src.utils as utils
 import src.turtle as turtle
 import src.lsystem.mutations as mutate
 from src.fitness import calculate_hu_fitness
-from src.constants import LETTER_STRING
+from src.constants import LETTER_STRING, debug
 
 
 def define_goal(axiom, transformations, angle, iterations):
