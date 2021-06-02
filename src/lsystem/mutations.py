@@ -65,10 +65,10 @@ def add_branch(transformations, key, index_left):
         list_conversion = list(transformations[key])
         list_conversion.insert(index_left, "[")
 
-        index_right =  np.random.randint(index_left+1, len(transformations[key])+2)
+        index_right = np.random.randint(index_left+1, len(transformations[key])+2)
         # in case empty branches are allowed index+1
 
-        list_conversion.insert(index_right,"]")
+        list_conversion.insert(index_right, "]")
 
         transformations[key] = "".join(list_conversion)
         return transformations

@@ -12,7 +12,7 @@ def branching_turtle_to_coords(turtle_program, turn_amount=45):
     state = (0, 0, 90)
     yield 0, 0
 
-    #print('turtle', turtle_program)
+    # print('turtle', turtle_program)
 
     for command in turtle_program:
         x, y, angle = state
@@ -51,8 +51,8 @@ def plot_coords(coords, title, bare_plot=False):
     plt.gca().set_aspect('equal', 'datalim')
     # Converts a list of coordinates into
     # lists of X and Y values, respectively.
-    X, Y = zip(*coords)
+    x, y = zip(*coords)
     # Draws the plot.
-    plt.plot(X, Y)
+    plt.plot(x, y)
     plt.title(title)
     plt.show()

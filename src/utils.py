@@ -5,7 +5,7 @@ plt.style.use('bmh')  # Use some nicer default colors
 # local imports
 
 
-def turn_coords_to_numpy(X, Y):
+def turn_coords_to_numpy(x, y):
     """
     X: list of x-coordinates
     Y: list of y-coordinates
@@ -18,7 +18,7 @@ def turn_coords_to_numpy(X, Y):
 
     # To remove the huge white borders
     ax.margins(0)
-    ax.plot(X, Y, color="black")
+    ax.plot(x, y, color="black")
     ax.axis('off')
 
     fig.canvas.draw()       # draw the canvas, cache the renderer

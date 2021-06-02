@@ -3,7 +3,6 @@
 # general imports
 import random
 import numpy as np
-from PIL import Image
 # local imports
 import src.utils as utils
 import src.turtle as turtle
@@ -101,10 +100,10 @@ class LSystem:
 
     def transform_multiple_evolve(self, iterations, p):
         """Transforms for multiple iterations"""
-        sequence = None
+        sequence = self.axiom
         for _ in range(iterations):
             self.mutate_transformations(p)
-            sequence = self.transform_sequence()
+            sequence = self.transform_sequence(sequence)
         return sequence
 
     def transform_multiple(self, iterations):
