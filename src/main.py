@@ -18,10 +18,10 @@ if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
-                  "pop_size": 10,
+                  "pop_size": 50,
                   "iterations": 5,
-                  "nr_gens": 3,
-                  "tournament_size": 3}
+                  "nr_gens": 5,
+                  "tournament_size": 20}
 
     # define the goal parameters
     goal = define_goal(axiom='A',

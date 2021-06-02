@@ -93,6 +93,12 @@ class LSystem:
                         self.transformations = mutate.remove_plus_minus(self.transformations, key, index)
                     else:
                         pass
+                if debug:
+                    if not self.verify_system():
+                        raise ValueError(f"Resulting sequence of system is faulty:"
+                                         f"\t- axiom: {self.axiom}"
+                                         f"\t- rules: {self.transformations}"
+                                         f"\t- sequ.: {self.transform_sequence()}")
 
     def transform_sequence(self):
         return ''.join(self.transformations.get(c, c) for c in self.axiom)
@@ -167,6 +173,23 @@ class LSystem:
 
     # def __str__(self):
     #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
+
+    def verify_system(self):
+        """
+        Checks whether a sequence is correct.
+        1. closing brackets must come after opening brackets
+        """
+        sequence = self.transform_sequence()
+        bracket_balance = 0
+        for character in sequence:
+            if character == '[':
+                bracket_balance += 1
+            elif character == ']':
+                bracket_balance -= 1
+
+            if bracket_balance < 0:
+                return False
+        return True
 
     def __repr__(self):
         return f"LSystem(axiom={self.axiom}, angle={self.angle}, rules={self.transformations})"
