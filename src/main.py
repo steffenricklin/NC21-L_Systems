@@ -13,17 +13,17 @@ def run(goal_system, goal, params):
     turtles, fitness_turtles = ea.run_evolutions(params["nr_gens"], tournament_size=params["tournament_size"])
     print("finished")
 
-    utils.show_results(turtles, fitness_turtles, print_n=5)
+    utils.show_results(turtles, fitness_turtles, print_n=params["tournament_size"])
 
 
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
-                  "pop_size": 3,
+                  "pop_size": 50,
                   "iterations": 5,
-                  "nr_gens": 5,
-                  "tournament_size": 2}
+                  "nr_gens": 30,
+                  "tournament_size": 5}
 
     # define the goal parameters
     goal_system, goal = define_goal(axiom='A',

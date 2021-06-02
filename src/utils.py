@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('bmh')  # Use some nicer default colors
 # local imports
-import src.turtle as turtle
 
 
 def turn_coords_to_numpy(X, Y):
@@ -31,10 +30,7 @@ def turn_coords_to_numpy(X, Y):
 
 
 def show_results(l_systems, fitness_turtles, print_n):
-    # np.sort()
-    print(fitness_turtles[0])
     arg_systems = np.argsort(fitness_turtles)
-    print(arg_systems)
     l_systems = list(np.asarray(l_systems)[arg_systems])
     fitness_turtles = list(np.asarray(fitness_turtles)[arg_systems])
 
@@ -43,9 +39,6 @@ def show_results(l_systems, fitness_turtles, print_n):
         system = l_systems[i]
         fitness = fitness_turtles[i]
         system.show_image(f"system {str(i)}, iterations={str(system.iterations)},\nfitness={str(round(fitness, 5))}")
-        # seq = system.transform_multiple(params["iterations"])
-        # xy = turtle.branching_turtle_to_coords(seq, system.angle)
-        # turtle.plot_coords(xy, bare_plot=True)
         print(f"turtle {i}:")
         print("\t- axiom:   ", system.axiom)
         print("\t- t.-rules:", system.transformations)
