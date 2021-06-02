@@ -32,7 +32,7 @@ class EA:
         - select candidates for the next generation
         """
         for mu in range(self.pop_size):
-            self.population.append(LSystem(None, None, 45, self.nr_iter, rand=True))
+            self.population.append(LSystem(None, None, 45, iterations=self.nr_iter, rand=True))
 
         # simulate evolution
         fitness_population = None
@@ -46,7 +46,7 @@ class EA:
             # mutations
             children = copy.deepcopy(self.population)
 
-            for nr, child in enumerate(children):
+            for _, child in enumerate(children):
                 child.mutate_transformations(prob_mutation)
             self.population.extend(children)
 

@@ -57,6 +57,34 @@ def change_letter(transformations, key, index):
     return transformations
 
 
+def remove_branch(transformations, key, index, is_open_bracket):
+    """
+    Removes a branch in a transformation rule.
+    """
+    list_conversion = list(transformations[key])
+
+    loop_list = list_conversion[index:]
+    if not is_open_bracket:
+        loop_list = list_conversion[:index+1][::-1]
+
+    index_2 = index
+    bracket_counter = 0
+    for idx, ch in enumerate(loop_list):
+        bracket_counter += 1 if ch == '[' else 0  # should +1 at index_left
+        bracket_counter -= 1 if ch == ']' else 0
+        if bracket_counter == 0:
+            index_2 += idx if is_open_bracket else -idx
+            break
+    if index_2 == index:
+        raise ValueError(f"Something is wrong with the transformation rule: {transformations[key]}")
+
+    list_conversion[index] = ''
+    list_conversion[index_2] = ''
+
+    transformations[key] = "".join(list_conversion)
+    return transformations
+
+
 def remove_branch_left(transformations, key, index_left):
     """
     the key is a left bracket
