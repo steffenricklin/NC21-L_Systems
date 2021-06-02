@@ -1,10 +1,13 @@
 """
 """
 # general imports
+import sys
+
 import matplotlib.pyplot as plt
 import random
 import copy
 import queue
+from tqdm import trange
 # local imports
 from src.lsystem.LSystem import LSystem
 from src.fitness import calculate_hu_fitness
@@ -37,8 +40,9 @@ class EA:
 
         # simulate evolution
         fitness_population = None
-        for gen in range(n_gens):
-            print("generation ", gen)
+        for _ in trange(n_gens, file=sys.stdout, desc='generations'):
+            # for gen in range(n_gens):
+            #     print("generation ", gen)
             # ?select random pairs
             # ?cross over
             # Some plants can grow offspring from their own roots: cloning
@@ -81,12 +85,12 @@ class EA:
         combined_list = list(zip(population, fitness_list))
         random.shuffle(combined_list)
 
-        q = queue.Queue(self.pop_size*2)
+        q = queue.Queue(self.pop_size * 2)
         for element in combined_list:
             q.put(element)
-        while len(selected)< self.pop_size:
+        while len(selected) < self.pop_size:
             best_system, best_fitness = q.get()
-            for _ in range(tournament_size-1):
+            for _ in range(tournament_size - 1):
                 a_system, a_fitness = q.get()
                 if a_fitness <= best_fitness:
                     q.put((best_system, best_fitness))
@@ -96,6 +100,7 @@ class EA:
                     q.put((a_system, a_fitness))
 
             selected.append(best_system)
+            fitness_selected.append(best_fitness)
 
         '''
         # run several tournaments, until there are enough candidates selected to replace the population
@@ -111,7 +116,5 @@ class EA:
             selected.append(population[winner_ind])
             fitness_selected.append(fitness_list[winner_ind])
         '''
-
-
 
         return selected, fitness_selected

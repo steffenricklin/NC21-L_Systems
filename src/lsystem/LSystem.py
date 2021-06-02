@@ -21,7 +21,7 @@ def define_goal(axiom, transformations, angle, iterations):
     goal_numpy = utils.turn_coords_to_numpy(x, y)
     # ensure that it is not RGB anymore
     goal = np.reshape(goal_numpy[:, :, 0], (480, 640, 1))
-    return goal
+    return goal_system, goal
 
 
 class LSystem:
@@ -96,8 +96,8 @@ class LSystem:
                     else:
                         pass
 
-    def transform_sequence(self):
-        return ''.join(self.transformations.get(c, c) for c in self.axiom)
+    def transform_sequence(self, sequence):
+        return ''.join(self.transformations.get(c, c) for c in sequence)
 
     def transform_multiple_evolve(self, iterations, p):
         """Transforms for multiple iterations"""
@@ -109,9 +109,9 @@ class LSystem:
 
     def transform_multiple(self, iterations):
         """Transforms for multiple iterations"""
-        sequence = None
+        sequence = self.axiom
         for _ in range(iterations):
-            sequence = self.transform_sequence()
+            sequence = self.transform_sequence(sequence)
         return sequence
 
     def to_coords(self):

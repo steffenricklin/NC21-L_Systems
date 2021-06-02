@@ -32,6 +32,7 @@ def turn_coords_to_numpy(X, Y):
 
 def show_results(l_systems, fitness_turtles, params):
     for i, system in enumerate(l_systems):
+        system.show_image(f"system {str(i)}")
         seq = system.transform_multiple(params["iterations"])
         xy = turtle.branching_turtle_to_coords(seq, system.angle)
         turtle.plot_coords(xy, bare_plot=True)
