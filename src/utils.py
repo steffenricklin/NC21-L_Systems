@@ -30,15 +30,23 @@ def turn_coords_to_numpy(X, Y):
     return image
 
 
-def show_results(l_systems, fitness_turtles, params):
-    for i, system in enumerate(l_systems):
-        system.show_image(f"system {str(i)}, iterations={str(system.iterations)}")
-        seq = system.transform_multiple(params["iterations"])
-        xy = turtle.branching_turtle_to_coords(seq, system.angle)
-        turtle.plot_coords(xy, bare_plot=True)
+def show_results(l_systems, fitness_turtles, print_n):
+    # np.sort()
+    print(fitness_turtles[0])
+    arg_systems = np.argsort(fitness_turtles)
+    print(arg_systems)
+    l_systems = list(np.asarray(l_systems)[arg_systems])
+    fitness_turtles = list(np.asarray(fitness_turtles)[arg_systems])
+
+    rng = len(l_systems) if len(l_systems) < print_n else print_n
+    for i in range(rng):
+        system = l_systems[i]
+        fitness = fitness_turtles[i]
+        system.show_image(f"system {str(i)}, iterations={str(system.iterations)},\nfitness={str(round(fitness, 5))}")
+        # seq = system.transform_multiple(params["iterations"])
+        # xy = turtle.branching_turtle_to_coords(seq, system.angle)
+        # turtle.plot_coords(xy, bare_plot=True)
         print(f"turtle {i}:")
         print("\t- axiom:   ", system.axiom)
         print("\t- t.-rules:", system.transformations)
         print("\t- fitness: ", fitness_turtles[i])
-    idx_best_turtle = min(range(len(l_systems)), key=lambda x: fitness_turtles[x])
-    print(f"Best system is system #{idx_best_turtle}")
