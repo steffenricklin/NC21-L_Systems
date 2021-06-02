@@ -4,6 +4,7 @@
 import matplotlib.pyplot as plt
 import random
 import copy
+import queue
 # local imports
 from src.lsystem.LSystem import LSystem
 from src.fitness import calculate_hu_fitness
@@ -22,7 +23,7 @@ class EA:
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
 
-    def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=1):
+    def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=2):
         """starts of with a given L-system / candidate solution.
         - evaluates the quality of each candidate
         - then repeats until termination condition is satisfied:
@@ -60,6 +61,8 @@ class EA:
         return self.population, fitness_population
 
     def run_tournament_selection(self, population, optimal, tournament_size, size_pop):
+        assert tournament_size <= size_pop
+        assert tournament_size > 1
         """
       Runs tournament selection on the current situation.
       This function computes the fitness of each candidate and then repeatedly
@@ -69,20 +72,35 @@ class EA:
 
         selected = []
         fitness_selected = []
-
         # compute the fitness for each candidate
         # print("start tournament selection")
         coords_list = []
         for nr, system in enumerate(population):
-            # print("number of system", nr)
-            # print(system)
             coords_list.append(system.to_coords())
         fitness_list = [calculate_hu_fitness(coordinate, optimal) for coordinate in coords_list]
-        # print(" - fit for free", fitness_list[0])
+        combined_list = list(zip(population, fitness_list))
+        random.shuffle(combined_list)
 
+        q = queue.Queue(self.pop_size*2)
+        for element in combined_list:
+            q.put(element)
+        while len(selected)< self.pop_size:
+            best_system, best_fitness = q.get()
+            for _ in range(tournament_size-1):
+                a_system, a_fitness = q.get()
+                if a_fitness <= best_fitness:
+                    q.put((best_system, best_fitness))
+                    best_system = a_system
+                    best_fitness = a_fitness
+                else:
+                    q.put((a_system, a_fitness))
+
+            selected.append(best_system)
+
+        '''
         # run several tournaments, until there are enough candidates selected to replace the population
         while len(selected) < size_pop:
-            # choose some random candidates from the population
+        #    # choose some random candidates from the population
             chosen_pop = random.sample(range(len(population)), tournament_size)
 
             # custom argmin
@@ -92,5 +110,8 @@ class EA:
             # add the best solution
             selected.append(population[winner_ind])
             fitness_selected.append(fitness_list[winner_ind])
+        '''
+
+
 
         return selected, fitness_selected

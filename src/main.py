@@ -5,6 +5,7 @@ from src.lsystem.LSystem import define_goal
 import src.utils as utils
 
 
+
 def run(goal, params):
     # pass to EA
     ea = EA(goal, params)
@@ -13,15 +14,14 @@ def run(goal, params):
 
     utils.show_results(turtles, fitness_turtles, params)
 
-
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
-                  "pop_size": 10,
+                  "pop_size": 25,
                   "iterations": 5,
-                  "nr_gens": 3,
-                  "tournament_size": 3}
+                  "nr_gens": 100,
+                  "tournament_size": 5}
 
     # define the goal parameters
     goal = define_goal(axiom='A',
@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     # simulate
     run(goal, parameters)
+
 
 # def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
 #     lsystem = LSystem(axiom, transformations, angle)
