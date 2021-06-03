@@ -172,6 +172,15 @@ class LSystem:
     # def __str__(self):
     #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
 
+    def get_transformations(self):
+        return self.transformations
+
+    def replace_rule(self, key, rule):
+        self.transformations[key] = rule
+
+    def set_transformations(self, trans):
+        self.transformations =trans
+
     def verify_system(self, msg=""):
         """
         Checks whether a sequence is correct.

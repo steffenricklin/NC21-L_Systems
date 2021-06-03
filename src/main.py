@@ -13,26 +13,49 @@ def run(goal_system, goal, params):
     turtles, fitness_turtles = ea.run_evolutions(params["nr_gens"], tournament_size=params["tournament_size"])
     print("finished")
 
-    utils.show_results(turtles, fitness_turtles, print_n=params["tournament_size"])
+    utils.show_results(turtles, fitness_turtles, print_n=20)
 
+def test():
+    pop=LSystem.LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
+    cop = copy.deepcopy(pop)
+    cop.set_transformations({'B': 'BBCC'})
+    print("original",pop.get_transformations())
+    print("copy",cop.get_transformations())
+    rules_a = pop.get_transformations()
+    rules_b = cop.get_transformations()
+    matches = set(rules_a.keys()) & set(rules_b.keys())
+    print("matching keys", matches)
+    chosen_key = random.choice(list(matches))
+
+    # swap matching rules
+    child_a = copy.deepcopy(pop)
+    print("child a before", child_a.get_transformations())
+    child_b = copy.deepcopy(cop)
+    child_a.replace_rule(chosen_key, rules_b[chosen_key])
+    print("child a after", child_a.get_transformations())
+    child_b.replace_rule(chosen_key, rules_a[chosen_key])
+
+    # add children
 
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
-                  "pop_size": 50,
+                  "pop_size": 20,
                   "iterations": 5,
                   "nr_gens": 30,
-                  "tournament_size": 5}
+                  "tournament_size": 3}
 
     # define the goal parameters
+
     goal_system, goal = define_goal(axiom='A',
-                                    transformations={'F': 'FF', 'A': 'F[+AF-[A]--A][---A]'},
+                                    transformations={'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'},
                                     angle=parameters["angle"],
                                     iterations=parameters["iterations"])
 
     # simulate
     run(goal_system, goal, parameters)
+
 
 # def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
 #     lsystem = LSystem(axiom, transformations, angle)

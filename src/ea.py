@@ -11,6 +11,7 @@ from tqdm import trange
 # local imports
 from src.lsystem.LSystem import LSystem
 from src.fitness import calculate_hu_fitness
+import numpy as np
 
 plt.style.use('bmh')  # Use some nicer default colors
 
@@ -25,6 +26,7 @@ class EA:
         self.pop_size = population_params["pop_size"]
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
+        self.cross_prob = 0.9
 
     def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=2):
         """starts of with a given L-system / candidate solution.
@@ -49,7 +51,23 @@ class EA:
             # so who needs cross over anyway
 
             # mutations
-            children = copy.deepcopy(self.population)
+            children = []
+
+            pairs = np.random.choice(self.pop_size,(int(self.pop_size/2), 2), replace=False)
+
+            for pair in pairs:
+                parent_a = self.population[pair[0]]
+                parent_b = self.population[pair[1]]
+                pc = random.random()
+                if pc < self.cross_prob:
+                    self.cross_over(parent_a,parent_b, children)
+                else:
+                    child_a = copy.deepcopy(parent_a)
+                    child_b = copy.deepcopy(parent_b)
+
+                    # add children
+                    children.append(child_a)
+                    children.append(child_b)
 
             for _, child in enumerate(children):
                 child.mutate_transformations(prob_mutation)
@@ -61,6 +79,7 @@ class EA:
                                                                                 self.goal_img,
                                                                                 tournament_size,
                                                                                 self.pop_size)
+            print("end selection")
             children.clear()
         return self.population, fitness_population
 
@@ -118,3 +137,27 @@ class EA:
         '''
 
         return selected, fitness_selected
+    def cross_over(self, parent_a, parent_b, children):
+        #find mathcing keys
+        rules_a = parent_a.get_transformations()
+        rules_b = parent_b.get_transformations()
+        matches = set(rules_a.keys()) & set(rules_b.keys())
+        if matches:
+            chosen_key = random.choice(list(matches))
+
+            #swap matching rules
+            child_a = copy.deepcopy(parent_a)
+            child_b = copy.deepcopy(parent_b)
+            child_a.replace_rule(chosen_key, rules_b[chosen_key])
+            child_b.replace_rule(chosen_key, rules_a[chosen_key])
+
+            #add children
+            children.append(child_a)
+            children.append(child_b)
+        else:
+            child_a = copy.deepcopy(parent_a)
+            child_b = copy.deepcopy(parent_b)
+
+            # add children
+            children.append(child_a)
+            children.append(child_b)
