@@ -41,10 +41,10 @@ if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
-                  "pop_size": 20,
+                  "pop_size": 30,
                   "iterations": 5,
-                  "nr_gens": 30,
-                  "tournament_size": 3}
+                  "nr_gens": 3,
+                  "tournament_size": 5}
 
     # define the goal parameters
 

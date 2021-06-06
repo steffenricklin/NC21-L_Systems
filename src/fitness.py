@@ -15,5 +15,11 @@ def calculate_hu_fitness(coordinates, optimal):
     x, y = coordinates
     numpy_sol = utils.turn_coords_to_numpy(x, y)
     numpy_sol = np.reshape(numpy_sol[:, :, 0], (480, 640, 1))
-    fitness = cv2.matchShapes(numpy_sol, optimal, cv2.CONTOURS_MATCH_I1, 0)
+    fitness = cv2.matchShapes(numpy_sol, optimal, cv2.CONTOURS_MATCH_I2, 0)
     return fitness
+
+def calculate_convexity_defects(coordinates):
+    '''
+    return: convexivity defects of the current structure
+    '''
+    #TO DO

@@ -38,7 +38,7 @@ class EA:
         - select candidates for the next generation
         """
         for mu in range(self.pop_size):
-            self.population.append(LSystem(None, None, 45, iterations=self.nr_iter, rand=True))
+            self.population.append(LSystem(None, None, self.angle, iterations=self.nr_iter, rand=True))
 
         # simulate evolution
         fitness_population = None
@@ -53,17 +53,17 @@ class EA:
             # mutations
             children = []
 
-            pairs = np.random.choice(self.pop_size,(int(self.pop_size/2), 2), replace=False)
+            pairs = np.random.choice(self.pop_size, (int(self.pop_size/2), 2), replace=False)
 
             for pair in pairs:
                 parent_a = self.population[pair[0]]
                 parent_b = self.population[pair[1]]
                 pc = random.random()
                 if pc < self.cross_prob:
-                    self.cross_over(parent_a,parent_b, children)
+                    self.cross_over(parent_a, parent_b, children)
                 else:
-                    child_a = copy.deepcopy(parent_a)
-                    child_b = copy.deepcopy(parent_b)
+                    child_a =LSystem(None, None, self.angle, iterations=self.nr_iter, rand=True)# copy.deepcopy(parent_a)
+                    child_b =LSystem(None, None, self.angle, iterations=self.nr_iter, rand=True)#copy.deepcopy(parent_b)
 
                     # add children
                     children.append(child_a)
@@ -104,7 +104,7 @@ class EA:
         combined_list = list(zip(population, fitness_list))
         random.shuffle(combined_list)
 
-        q = queue.Queue(self.pop_size * 2)
+        q = queue.Queue(len(combined_list))
         for element in combined_list:
             q.put(element)
         while len(selected) < self.pop_size:
@@ -155,8 +155,15 @@ class EA:
             children.append(child_a)
             children.append(child_b)
         else:
+            print("statement entered")
+            chosen_key_a = random.choice(list(rules_a.keys()))
+            chosen_key_b = random.choice(list(rules_b.keys()))
+
+            # swap matching rules
             child_a = copy.deepcopy(parent_a)
             child_b = copy.deepcopy(parent_b)
+            child_a.replace_rule(chosen_key_b, rules_b[chosen_key_b])
+            child_b.replace_rule(chosen_key_a, rules_a[chosen_key_a])
 
             # add children
             children.append(child_a)
