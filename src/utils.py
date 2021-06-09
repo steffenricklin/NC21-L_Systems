@@ -77,4 +77,3 @@ def fig2img(fig):
     buf = fig2data(fig)
     w, h, d = buf.shape
     return Image.frombytes("RGBA", (w, h), buf.tostring()).convert("L")
-    # return Image.frombuffer("L", (w, h), buf)
