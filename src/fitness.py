@@ -23,3 +23,8 @@ def calculate_convexity_defects(coordinates):
     return: convexivity defects of the current structure
     '''
     #TO DO
+
+
+def calculate_rms(x1, x2):
+    mse = np.sqrt(np.mean(np.sum(np.square(x1 - x2), axis=-1)))
+    return float(mse)

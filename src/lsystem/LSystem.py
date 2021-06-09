@@ -6,8 +6,8 @@ import numpy as np
 # local imports
 import src.utils as utils
 import src.turtle as turtle
+import src.fitness as fitness
 import src.lsystem.mutations as mutate
-from src.fitness import calculate_hu_fitness
 from src.constants import LETTER_STRING, debug
 
 
@@ -163,11 +163,15 @@ class LSystem:
         if ind_branch < len(rule):
             mutate.add_branch(transformations, key, ind_branch)
 
-    def get_fitness(self, optimal, method='hu'):
-        if method == 'hu':
-            return calculate_hu_fitness(self.to_coords(), optimal)
-        else:
-            raise NotImplementedError
+    def get_fitness(self, optimal, methods=('hu',)):
+        assert isinstance(methods, list) or isinstance(methods, tuple)
+
+        fit = 0
+        if 'hu' in methods:
+            fit += fitness.calculate_hu_fitness(self.to_coords(), optimal) * 100  # *100 to scale up the measure
+        if 'rms' in methods:
+            fit += fitness.calculate_rms(self.to_numpy(), optimal)
+        return fit
 
     # def __str__(self):
     #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
@@ -180,6 +184,12 @@ class LSystem:
 
     def set_transformations(self, trans):
         self.transformations =trans
+
+    def to_numpy(self):
+        x, y = self.to_coords()
+        numpy_sol = utils.turn_coords_to_numpy(x, y)
+        numpy_sol = np.reshape(numpy_sol[:, :, 0], (480, 640, 1))
+        return numpy_sol
 
     def verify_system(self, msg=""):
         """

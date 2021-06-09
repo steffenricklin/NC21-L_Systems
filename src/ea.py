@@ -27,6 +27,7 @@ class EA:
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
         self.cross_prob = 0.9
+        self.fitness_methods = population_params["fitness_func"]
 
     def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=2):
         """starts of with a given L-system / candidate solution.
@@ -62,8 +63,8 @@ class EA:
                 if pc < self.cross_prob:
                     self.cross_over(parent_a, parent_b, children)
                 else:
-                    child_a =LSystem(None, None, self.angle, iterations=self.nr_iter, rand=True)# copy.deepcopy(parent_a)
-                    child_b =LSystem(None, None, self.angle, iterations=self.nr_iter, rand=True)#copy.deepcopy(parent_b)
+                    child_a = copy.deepcopy(parent_a)
+                    child_b = copy.deepcopy(parent_b)
 
                     # add children
                     children.append(child_a)
@@ -79,7 +80,7 @@ class EA:
                                                                                 self.goal_img,
                                                                                 tournament_size,
                                                                                 self.pop_size)
-            print("end selection")
+            # print("end selection")
             children.clear()
         return self.population, fitness_population
 
@@ -98,9 +99,12 @@ class EA:
         # compute the fitness for each candidate
         # print("start tournament selection")
         coords_list = []
+        fitness_list = []
         for nr, system in enumerate(population):
-            coords_list.append(system.to_coords())
-        fitness_list = [calculate_hu_fitness(coordinate, optimal) for coordinate in coords_list]
+            coords = system.to_coords()
+            coords_list.append(coords)
+            fitness_list.append(system.get_fitness(optimal, methods=self.fitness_methods))
+        # fitness_list = [population[nr].get_fitness(optimal, methods=self.fitness_methods) for nr, coordinate in enumerate(coords_list)]
         combined_list = list(zip(population, fitness_list))
         random.shuffle(combined_list)
 
@@ -155,7 +159,7 @@ class EA:
             children.append(child_a)
             children.append(child_b)
         else:
-            print("statement entered")
+            # print("statement entered")
             chosen_key_a = random.choice(list(rules_a.keys()))
             chosen_key_b = random.choice(list(rules_b.keys()))
 

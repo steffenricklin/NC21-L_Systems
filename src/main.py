@@ -1,8 +1,10 @@
 # general imports
 # local imports
 from src.ea import EA
-from src.lsystem.LSystem import define_goal
+from src.lsystem.LSystem import define_goal, LSystem
 import src.utils as utils
+import copy
+import random
 
 
 def run(goal_system, goal, params):
@@ -10,13 +12,13 @@ def run(goal_system, goal, params):
 
     # pass to EA
     ea = EA(goal, params)
-    turtles, fitness_turtles = ea.run_evolutions(params["nr_gens"], tournament_size=params["tournament_size"])
+    turtles, fitness_turtles = ea.run_evolutions(params["nr_gens"], prob_mutation=params["p_mutation"], tournament_size=params["tournament_size"])
     print("finished")
 
-    utils.show_results(turtles, fitness_turtles, print_n=20)
+    utils.show_results(turtles, fitness_turtles, print_n=params["tournament_size"])
 
 def test():
-    pop=LSystem.LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
+    pop = LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
     cop = copy.deepcopy(pop)
     cop.set_transformations({'B': 'BBCC'})
     print("original",pop.get_transformations())
@@ -44,7 +46,11 @@ if __name__ == '__main__':
                   "pop_size": 30,
                   "iterations": 5,
                   "nr_gens": 3,
-                  "tournament_size": 5}
+                  "tournament_size": 5,
+                  "p_mutation": 0.8,
+                  "fitness_func": ['rms']
+                  # "fitness_func": ['hu']
+                  }
 
     # define the goal parameters
 
