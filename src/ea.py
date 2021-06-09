@@ -11,6 +11,7 @@ from tqdm import trange
 # local imports
 from src.lsystem.LSystem import LSystem
 from src.fitness import calculate_hu_fitness
+from src.fitness import convex_hull_defect_fitness
 import numpy as np
 
 plt.style.use('bmh')  # Use some nicer default colors
@@ -22,6 +23,7 @@ class EA:
 
     def __init__(self, goal_img, population_params):
         self.goal_img = goal_img
+        self.goal_system = LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
         self.population = []
         self.pop_size = population_params["pop_size"]
         self.angle = population_params["angle"]
@@ -43,6 +45,7 @@ class EA:
 
         # simulate evolution
         fitness_population = None
+        hu_season = True
         for _ in trange(n_gens, file=sys.stdout, desc='generations'):
             # for gen in range(n_gens):
             #     print("generation ", gen)
@@ -75,7 +78,9 @@ class EA:
             self.population.extend(children)
 
             # select new generation
-
+            if random.random() >0.8:
+                hu_season = not hu_season
+            #print(hu_season)
             self.population, fitness_population = self.run_tournament_selection(self.population,
                                                                                 self.goal_img,
                                                                                 tournament_size,
@@ -84,7 +89,7 @@ class EA:
             children.clear()
         return self.population, fitness_population
 
-    def run_tournament_selection(self, population, optimal, tournament_size, size_pop):
+    def run_tournament_selection(self, population, optimal, tournament_size, size_pop, hu_season = True):
         assert tournament_size <= size_pop
         assert tournament_size > 1
         """
@@ -101,10 +106,9 @@ class EA:
         coords_list = []
         fitness_list = []
         for nr, system in enumerate(population):
-            coords = system.to_coords()
-            coords_list.append(coords)
-            fitness_list.append(system.get_fitness(optimal, methods=self.fitness_methods))
-        # fitness_list = [population[nr].get_fitness(optimal, methods=self.fitness_methods) for nr, coordinate in enumerate(coords_list)]
+            coords_list.append(system.to_coords())
+            methods = self.fitness_methods + ['hu'] if hu_season else self.fitness_methods
+            fitness_list.append(system.get_fitness(optimal, methods=methods))
         combined_list = list(zip(population, fitness_list))
         random.shuffle(combined_list)
 
@@ -159,7 +163,6 @@ class EA:
             children.append(child_a)
             children.append(child_b)
         else:
-            # print("statement entered")
             chosen_key_a = random.choice(list(rules_a.keys()))
             chosen_key_b = random.choice(list(rules_b.keys()))
 

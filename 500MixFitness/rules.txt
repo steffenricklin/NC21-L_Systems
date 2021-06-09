@@ -1,0 +1,80 @@
+turtle 0:
+	- axiom:    D
+	- t.-rules: {'D': 'D[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'BADD', 'B': 'DB+B'}
+	- fitness:  0.04905
+turtle 1:
+	- axiom:    D
+	- t.-rules: {'D': 'D[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD-BB', 'B': 'DB+B'}
+	- fitness:  0.04905
+turtle 2:
+	- axiom:    D
+	- t.-rules: {'D': 'B[C-D--DA]', 'A': 'B-+DAD+B-', 'C': 'DD-BD', 'B': 'B[B]+B'}
+	- fitness:  0.08806666666666679
+turtle 3:
+	- axiom:    D
+	- t.-rules: {'D': 'D[BD-DA]', 'A': 'B-+DCD+B-', 'C': 'BCAD', 'B': 'BB+B'}
+	- fitness:  0.1837666666666668
+turtle 4:
+	- axiom:    D
+	- t.-rules: {'D': 'B[C-D--DA]', 'A': 'B-+DAD+B-', 'C': 'DD-BD', 'B': 'BB+B'}
+	- fitness:  0.2228666666666668
+turtle 5:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD-BD', 'B': 'B[B]+B'}
+	- fitness:  0.24539166666666679
+turtle 6:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DCBD', 'B': 'B[B]+B'}
+	- fitness:  0.24539166666666679
+turtle 7:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD--BD', 'B': 'B[B]+B'}
+	- fitness:  0.24539166666666679
+turtle 8:
+	- axiom:    D
+	- t.-rules: {'D': 'D[BD--DA]', 'A': 'B-+DCD+B-', 'C': 'DD-BD', 'B': 'B[B]+B'}
+	- fitness:  0.27525
+turtle 9:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+BAD+B-', 'C': 'DCAD', 'B': 'DB+B'}
+	- fitness:  0.3304083333333332
+turtle 10:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+BAD+B-', 'C': 'DD--BD', 'B': 'DB+B'}
+	- fitness:  0.3304083333333332
+turtle 11:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+BAD+B-', 'C': 'DCAD', 'B': 'DB+B'}
+	- fitness:  0.3304083333333332
+turtle 12:
+	- axiom:    D
+	- t.-rules: {'D': 'D[C+D--DA]', 'A': 'B-+DAD+B-', 'C': 'DDAD', 'B': 'B[B]+B'}
+	- fitness:  0.3582166666666668
+turtle 13:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DADB-', 'C': 'DDA+D', 'B': 'B[B]+B'}
+	- fitness:  0.4507333333333332
+turtle 14:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DADB-', 'C': 'DDA+D', 'B': 'B[B-]+B'}
+	- fitness:  0.4507333333333332
+turtle 15:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD--BD', 'B': 'DB+B'}
+	- fitness:  0.4911583333333332
+turtle 16:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD--BD', 'B': 'DB+B'}
+	- fitness:  0.4911583333333332
+turtle 17:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD-BD', 'B': 'DB+B'}
+	- fitness:  0.4911583333333332
+turtle 18:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD--BD', 'B': 'DB+B'}
+	- fitness:  0.4911583333333332
+turtle 19:
+	- axiom:    D
+	- t.-rules: {'D': 'B[BD--DA]', 'A': 'B-+DAD+B-', 'C': 'DD-BB', 'B': 'DB+B'}
+	- fitness:  0.4911583333333332
