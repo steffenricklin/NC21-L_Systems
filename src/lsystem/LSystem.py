@@ -61,9 +61,8 @@ class LSystem:
                 # insert
                 if random_nr >= 0.95:
                     self.transformations = mutate.add_plus_minus(self.transformations, key, index)
-                '''I've commented this out because it generates unbalanced lists... '''
-                # insert
-                # elif random_nr >= 0.90:
+
+                # elif random_nr >= 0.90:  '''Commented out since it generates unbalanced lists... '''
                 #    add_branch(transformations, key, index)
 
                 if random_nr >= p:
@@ -110,10 +109,6 @@ class LSystem:
         seq = self.transform_multiple(self.iterations)
         xy = turtle.branching_turtle_to_coords(seq, self.angle)
         turtle.plot_coords(xy, title, bare_plot=True)
-        # x, y = self.to_coords()
-        # im_nump = utils.turn_coords_to_numpy(x, y)
-        # img = Image.fromarray(im_nump, 'RGB')
-        # img.show()
 
     def generate_random_rules(self):
         """
@@ -151,20 +146,19 @@ class LSystem:
         if ind_branch < len(rule):
             mutate.add_branch(transformations, key, ind_branch)
 
-    def get_fitness(self, optimal, methods=('convex',)):
-        assert isinstance(methods, list) or isinstance(methods, tuple)
+    def get_fitness(self, goal, method='convex'):
+        assert isinstance(goal, tuple), "goal should be (goal_system, goal_asnumpy)"
+        assert isinstance(method, str), f"method should be of type str, not {type(method)}"
 
-        fit = 0
-        if 'convex' in methods:
-            fit += fitness.calculate_convexity_defects(self.to_coords())
-        if 'hu' in methods:
-            fit += fitness.calculate_hu_fitness(self.to_coords(), optimal) * 100  # *100 to scale up the measure
-        if 'rms' in methods:
-            fit += fitness.calculate_rms(self.to_numpy(), optimal)
-        return fit
-
-    # def __str__(self):
-    #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
+        goal_system, goal_np = goal
+        if method == 'convex':
+            return fitness.convex_hull_defect_fitness(self.to_coords(), goal_system)
+        elif method == 'hu':
+            return fitness.calculate_hu_fitness(self.to_coords(), goal_np) * 100  # *100 to scale up the measure
+        elif method == 'rms':
+            return fitness.calculate_rms(self.to_numpy(), goal_np)
+        else:
+            raise ValueError(f"Requested fitness measure is {method}, but should be in ['hu', 'convex', 'rms].")
 
     def get_transformations(self):
         return self.transformations
@@ -173,7 +167,7 @@ class LSystem:
         self.transformations[key] = rule
 
     def set_transformations(self, trans):
-        self.transformations =trans
+        self.transformations = trans
 
     def to_numpy(self):
         x, y = self.to_coords()
@@ -186,8 +180,7 @@ class LSystem:
         Checks whether a sequence is correct.
         1. closing brackets must come after opening brackets
         """
-
-        if debug:
+        if debug:  # to be changed in constants.py
             sequence = self.transform_multiple(self.iterations)
             bracket_balance = 0
             for character in sequence:
@@ -202,6 +195,9 @@ class LSystem:
                                      f"\t- rules: {self.transformations}\n"
                                      f"\t- sequ.: {sequence}"+msg)
                     raise ValueError
+
+    # def __str__(self):
+    #     return f"LSystem axiom is '{self.axiom}', angle is {self.angle} and rules are '{self.transformations}'"
 
     def __repr__(self):
         return f"LSystem(axiom={self.axiom}, angle={self.angle}, rules={self.transformations})"

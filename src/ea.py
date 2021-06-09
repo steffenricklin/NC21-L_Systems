@@ -2,18 +2,14 @@
 """
 # general imports
 import sys
-
-import matplotlib.pyplot as plt
-import random
 import copy
 import queue
-from tqdm import trange
-# local imports
-from src.lsystem.LSystem import LSystem
-from src.fitness import calculate_hu_fitness
-from src.fitness import convex_hull_defect_fitness
+import random
 import numpy as np
-
+from tqdm import trange
+import matplotlib.pyplot as plt
+# local imports
+from src.lsystem.utils import init_population
 plt.style.use('bmh')  # Use some nicer default colors
 
 
@@ -22,15 +18,17 @@ class EA:
     """
 
     def __init__(self, goal, population_params):
-        goal_system, goal_img = goal
-        self.goal_img = goal_img
-        self.goal_system = LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
-        self.population = []
+        # self.goal_system = LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
+        self.goal_system = goal  # L-System object
+        self.goal_np = goal.to_numpy()  # L-System representation as numpy array
         self.pop_size = population_params["pop_size"]
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
-        self.fitness_methods = population_params["fitness_func"]
+        self.fitness_method = population_params["fitness_func"]
         self.cross_prob = 0.9
+
+        # init population
+        self.population = init_population(self.pop_size, None, None, self.angle, self.nr_iter, rand=True)
 
     def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=2):
         """starts of with a given L-system / candidate solution.
@@ -41,8 +39,6 @@ class EA:
         - evaluate new candidates
         - select candidates for the next generation
         """
-        for mu in range(self.pop_size):
-            self.population.append(LSystem(None, None, self.angle, iterations=self.nr_iter, rand=True))
 
         # simulate evolution
         fitness_population = None
@@ -83,22 +79,22 @@ class EA:
                 hu_season = not hu_season
             # print(hu_season)
             self.population, fitness_population = self.run_tournament_selection(self.population,
-                                                                                self.goal_img,
+                                                                                (self.goal_system, self.goal_np),
                                                                                 tournament_size,
                                                                                 self.pop_size)
             # print("end selection")
             children.clear()
         return self.population, fitness_population
 
-    def run_tournament_selection(self, population, optimal, tournament_size, size_pop, hu_season=True):
+    def run_tournament_selection(self, population, goal, tournament_size, size_pop, hu_season=True):
         assert tournament_size <= size_pop
         assert tournament_size > 1
         """
-      Runs tournament selection on the current situation.
-      This function computes the fitness of each candidate and then repeatedly
-      chooses k candidates out of the population and selects the best one
-      until the new population has formed. (selection with replacement)
-      """
+        Runs tournament selection on the current situation.
+        This function computes the fitness of each candidate and then repeatedly
+        chooses k candidates out of the population and selects the best one
+        until the new population has formed. (selection with replacement)
+        """
 
         selected = []
         fitness_selected = []
@@ -108,8 +104,8 @@ class EA:
         fitness_list = []
         for nr, system in enumerate(population):
             coords_list.append(system.to_coords())
-            methods = self.fitness_methods + ['hu'] if hu_season else self.fitness_methods
-            fitness_list.append(system.get_fitness(optimal, methods=methods))
+            fitness_measure = 'hu' if hu_season else self.fitness_method
+            fitness_list.append(system.get_fitness(goal, fitness_measure))
         combined_list = list(zip(population, fitness_list))
         random.shuffle(combined_list)
 
