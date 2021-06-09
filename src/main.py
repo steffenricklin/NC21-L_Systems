@@ -1,18 +1,21 @@
 # general imports
 # local imports
 from src.ea import EA
-from src.lsystem.LSystem import define_goal, LSystem
+from src.lsystem.LSystem import LSystem
+from src.fitness import calculate_convexity_defects
 import src.utils as utils
 
-from src.fitness import calculate_convexity_defects
 
-def run(goal_system, goal, params):
+def run(goal_system, params):
+
     goal_system.show_image(f"Goal system, iterations={str(goal_system.iterations)}")
 
     # pass to EA
-    ea = EA(goal, params)
-    turtles, fitness_turtles = ea.run_evolutions(params["nr_gens"], prob_mutation=params["p_mutation"], tournament_size=params["tournament_size"])
-    print("finished")
+    ea = EA(goal_system, params)
+    turtles, fitness_turtles = ea.run_evolutions(n_gens=params["nr_gens"],
+                                                 prob_mutation=params["p_mutation"],
+                                                 tournament_size=params["tournament_size"])
+    print("done.")
 
     utils.show_results(turtles, fitness_turtles, print_n=params["tournament_size"])
 
@@ -36,13 +39,12 @@ if __name__ == '__main__':
                   "fitness_func": ['convex']
                   }
 
-    # define the goal parameters
-
-    goal_system, goal = define_goal(axiom='A',
-                                    transformations={'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'},
-                                    angle=parameters["angle"],
-                                    iterations=parameters["iterations"])
+    # define the goal, returns a goal L-System and it's numpy representation
+    goal = define_goal(axiom='A',
+                       transformations={'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'},
+                       angle=parameters["angle"],
+                       iterations=parameters["iterations"])
 
     # simulate
-    run(goal_system, goal, parameters)
-    #test()
+    run(goal, parameters)
+    # test()

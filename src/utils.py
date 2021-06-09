@@ -1,9 +1,8 @@
 # general imports
 import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 plt.style.use('bmh')  # Use some nicer default colors
-from PIL import Image
-from skimage import color
 # local imports
 
 
@@ -45,9 +44,6 @@ def show_results(l_systems, fitness_turtles, print_n):
         print("\t- axiom:   ", system.axiom)
         print("\t- t.-rules:", system.transformations)
         print("\t- fitness: ", fitness_turtles[i])
-
-
-
 
 
 def fig2data(fig):

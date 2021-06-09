@@ -11,18 +11,6 @@ import src.lsystem.mutations as mutate
 from src.constants import LETTER_STRING, debug
 
 
-def define_goal(axiom, transformations, angle, iterations):
-    goal_system = LSystem(axiom, transformations, angle, iterations)
-    goal_sequence = goal_system.transform_multiple(iterations)
-
-    coords_g = turtle.branching_turtle_to_coords(goal_sequence, angle)
-    x, y = zip(*coords_g)
-    goal_numpy = utils.turn_coords_to_numpy(x, y)
-    # ensure that it is not RGB anymore
-    goal = np.reshape(goal_numpy[:, :, 0], (480, 640, 1))
-    return goal_system, goal
-
-
 class LSystem:
     """
     Represents the production rules and provides functions for changing
@@ -163,10 +151,12 @@ class LSystem:
         if ind_branch < len(rule):
             mutate.add_branch(transformations, key, ind_branch)
 
-    def get_fitness(self, optimal, methods=('hu',)):
+    def get_fitness(self, optimal, methods=('convex',)):
         assert isinstance(methods, list) or isinstance(methods, tuple)
 
         fit = 0
+        if 'convex' in methods:
+            fit += fitness.calculate_convexity_defects(self.to_coords())
         if 'hu' in methods:
             fit += fitness.calculate_hu_fitness(self.to_coords(), optimal) * 100  # *100 to scale up the measure
         if 'rms' in methods:

@@ -21,15 +21,16 @@ class EA:
     """
     """
 
-    def __init__(self, goal_img, population_params):
+    def __init__(self, goal, population_params):
+        goal_system, goal_img = goal
         self.goal_img = goal_img
         self.goal_system = LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
         self.population = []
         self.pop_size = population_params["pop_size"]
         self.angle = population_params["angle"]
         self.nr_iter = population_params["iterations"]
-        self.cross_prob = 0.9
         self.fitness_methods = population_params["fitness_func"]
+        self.cross_prob = 0.9
 
     def run_evolutions(self, n_gens, prob_mutation=0.75, tournament_size=2):
         """starts of with a given L-system / candidate solution.
@@ -57,7 +58,7 @@ class EA:
             # mutations
             children = []
 
-            pairs = np.random.choice(self.pop_size, (int(self.pop_size/2), 2), replace=False)
+            pairs = np.random.choice(self.pop_size, (int(self.pop_size / 2), 2), replace=False)
 
             for pair in pairs:
                 parent_a = self.population[pair[0]]
@@ -78,9 +79,9 @@ class EA:
             self.population.extend(children)
 
             # select new generation
-            if random.random() >0.8:
+            if random.random() > 0.8:
                 hu_season = not hu_season
-            #print(hu_season)
+            # print(hu_season)
             self.population, fitness_population = self.run_tournament_selection(self.population,
                                                                                 self.goal_img,
                                                                                 tournament_size,
@@ -89,7 +90,7 @@ class EA:
             children.clear()
         return self.population, fitness_population
 
-    def run_tournament_selection(self, population, optimal, tournament_size, size_pop, hu_season = True):
+    def run_tournament_selection(self, population, optimal, tournament_size, size_pop, hu_season=True):
         assert tournament_size <= size_pop
         assert tournament_size > 1
         """
@@ -145,21 +146,22 @@ class EA:
         '''
 
         return selected, fitness_selected
+
     def cross_over(self, parent_a, parent_b, children):
-        #find mathcing keys
+        # find mathcing keys
         rules_a = parent_a.get_transformations()
         rules_b = parent_b.get_transformations()
         matches = set(rules_a.keys()) & set(rules_b.keys())
         if matches:
             chosen_key = random.choice(list(matches))
 
-            #swap matching rules
+            # swap matching rules
             child_a = copy.deepcopy(parent_a)
             child_b = copy.deepcopy(parent_b)
             child_a.replace_rule(chosen_key, rules_b[chosen_key])
             child_b.replace_rule(chosen_key, rules_a[chosen_key])
 
-            #add children
+            # add children
             children.append(child_a)
             children.append(child_b)
         else:
