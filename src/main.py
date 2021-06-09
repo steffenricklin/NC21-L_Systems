@@ -4,6 +4,8 @@ from src.ea import EA
 from src.lsystem.LSystem import define_goal
 import src.utils as utils
 
+from src.lsystem import LSystem
+from src.fitness import calculate_convexity_defects
 
 def run(goal_system, goal, params):
     goal_system.show_image(f"Goal system, iterations={str(goal_system.iterations)}")
@@ -16,34 +18,17 @@ def run(goal_system, goal, params):
     utils.show_results(turtles, fitness_turtles, print_n=20)
 
 def test():
-    pop=LSystem.LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
-    cop = copy.deepcopy(pop)
-    cop.set_transformations({'B': 'BBCC'})
-    print("original",pop.get_transformations())
-    print("copy",cop.get_transformations())
-    rules_a = pop.get_transformations()
-    rules_b = cop.get_transformations()
-    matches = set(rules_a.keys()) & set(rules_b.keys())
-    print("matching keys", matches)
-    chosen_key = random.choice(list(matches))
-
-    # swap matching rules
-    child_a = copy.deepcopy(pop)
-    print("child a before", child_a.get_transformations())
-    child_b = copy.deepcopy(cop)
-    child_a.replace_rule(chosen_key, rules_b[chosen_key])
-    print("child a after", child_a.get_transformations())
-    child_b.replace_rule(chosen_key, rules_a[chosen_key])
-
-    # add children
-
+    pop= LSystem.LSystem('A', {'B': 'BB', 'A': 'B[+AB-[A]--A][---A]'}, 22.5, 5)
+    coordinates = pop.to_coords()
+    calculate_convexity_defects(coordinates)
+    print("finished")
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     # define the ea - parameters
     parameters = {"angle": 22.5,
                   "pop_size": 30,
                   "iterations": 5,
-                  "nr_gens": 3,
+                  "nr_gens": 500,
                   "tournament_size": 5}
 
     # define the goal parameters
@@ -55,7 +40,7 @@ if __name__ == '__main__':
 
     # simulate
     run(goal_system, goal, parameters)
-
+    #test()
 
 # def l_plot_evolve(axiom, transformations, iterations=0, angle=45., p=0.5):
 #     lsystem = LSystem(axiom, transformations, angle)

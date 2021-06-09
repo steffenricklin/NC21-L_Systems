@@ -115,8 +115,8 @@ class LSystem:
 
     def to_coords(self):
         sequence = self.transform_multiple(self.iterations)
-        coords = turtle.branching_turtle_to_coords(sequence, self.angle)
-        return zip(*coords)
+        xy = turtle.branching_turtle_to_coords(sequence, self.angle)
+        return zip(*xy)
 
     def show_image(self, title=""):
         seq = self.transform_multiple(self.iterations)
