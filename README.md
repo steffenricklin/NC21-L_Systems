@@ -4,11 +4,9 @@
 
 ### Setup
 
-Unfortunately, we did not find the time to provide a requirements.txt with the packages you need to be able to import all the packages yet.
-So it might be that you have to install a few packages via pip manually.
-
-We may update this project today (10.06.2021) with a requirements.txt so you can easily see which packages are required.
-
+To run the project you need python3 and make sure to have the packages listed in `requirements.txt` installed. 
+If they are not installed yet, do so using pip or conda.
+ 
 ### Running a simulation
 
 To run a simulation run the `src/main.py` file. From our tests, this does not work from the command line. We recommend 
