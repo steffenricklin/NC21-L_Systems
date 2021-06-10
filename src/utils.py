@@ -7,11 +7,11 @@ plt.style.use('bmh')  # Use some nicer default colors
 
 
 def turn_coords_to_numpy(x, y):
-    """
-    X: list of x-coordinates
-    Y: list of y-coordinates
-    Turns the X and Y coordinates as extracted from zip(*branching_turtle_to_coordinates())
+    """Turns the X and Y coordinates as extracted from zip(*branching_turtle_to_coordinates())
     into a numpy array representing the figure.
+
+    :param x: list of x-coordinates
+    :param y: list of y-coordinates
     """
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -31,6 +31,12 @@ def turn_coords_to_numpy(x, y):
 
 
 def show_results(l_systems, fitness_turtles, print_n):
+    """The top print_n LSystems are plotted and their axiom, rules and fitness printed.
+
+    :param l_systems: list of LSystems
+    :param fitness_turtles: list of fitness values corresponding to the l_systems list
+    :param print_n: int, how many results to print
+    """
     arg_systems = np.argsort(fitness_turtles)
     l_systems = list(np.asarray(l_systems)[arg_systems])
     fitness_turtles = list(np.asarray(fitness_turtles)[arg_systems])
@@ -47,10 +53,10 @@ def show_results(l_systems, fitness_turtles, print_n):
 
 
 def fig2data(fig):
-    """
-    @brief Convert a Matplotlib figure to a 4D numpy array with RGBA channels and return it
-    @param fig a matplotlib figure
-    @return a numpy 3D array of RGBA values
+    """Convert a figure to a 4D numpy array with RGBA channels and return it
+
+    :param fig: a figure
+    :return: a numpy 3D array of RGBA values
     source: https://web-backend.icare.univ-lille.fr/tutorials/convert_a_matplotlib_figure
     """
     # draw the renderer
@@ -67,10 +73,10 @@ def fig2data(fig):
 
 
 def fig2img(fig):
-    """
-    @brief Convert a Matplotlib figure to a PIL Image in RGBA format and return it
-    @param fig a matplotlib figure
-    @return a Python Imaging Library ( PIL ) image
+    """Convert a figure to a PIL Image in RGBA format and return it
+
+    :param fig: a figure
+    :return: a Python Imaging Library ( PIL ) image
     source: https://web-backend.icare.univ-lille.fr/tutorials/convert_a_matplotlib_figure
     """
     # put the figure pixmap into a numpy array
