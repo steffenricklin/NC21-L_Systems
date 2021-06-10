@@ -7,14 +7,17 @@ import matplotlib.pyplot as plt
 from src.constants import LETTER_STRING, DEGREES_TO_RADIANS
 
 
-def branching_turtle_to_coords(turtle_program, turn_amount=45):
+def branching_turtle_to_coords(sequence, turn_amount=45):
+    """Transforms a sequence from an LSystem into x,y coordinates.
+
+    :param sequence: sequence of characters from an LSystem representation
+    :param turn_amount: the angle at which the 'turtle' turns
+    """
     saved_states = list()
     state = (0, 0, 90)
     yield 0, 0
 
-    # print('turtle', turtle_program)
-
-    for command in turtle_program:
+    for command in sequence:
         x, y, angle = state
 
         if command.lower() in LETTER_STRING:  # Move forward (matches a-j and A-J)
@@ -44,6 +47,12 @@ def branching_turtle_to_coords(turtle_program, turn_amount=45):
 
 
 def plot_coords(coords, title, bare_plot=False):
+    """Plots the given coordinates
+
+    :param coords: coordinates x,y
+    :param title: title for the plot
+    :param bare_plot: True turns the axis markers off
+    """
     if bare_plot:
         # Turns off the axis markers.
         plt.axis('off')
