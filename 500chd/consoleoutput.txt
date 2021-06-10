@@ -1,0 +1,82 @@
+turtle 0:
+	- axiom:    D
+	- t.-rules: {'D': '-D[C-D]-B-', 'A': 'D', 'B': 'A+', 'C': 'C'}
+	- fitness:  0.003183333333333212
+turtle 1:
+	- axiom:    D
+	- t.-rules: {'D': '-D[C-D]-B-', 'A': 'D', 'B': 'A+', 'C': 'C'}
+	- fitness:  0.003183333333333212
+turtle 2:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'C-'}
+	- fitness:  0.005658333333333212
+turtle 3:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'A'}
+	- fitness:  0.005658333333333212
+turtle 4:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 5:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'A'}
+	- fitness:  0.005658333333333212
+turtle 6:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'A'}
+	- fitness:  0.005658333333333212
+turtle 7:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'C+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 8:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 9:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 10:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'B'}
+	- fitness:  0.005658333333333212
+turtle 11:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'A'}
+	- fitness:  0.005658333333333212
+turtle 12:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'C-'}
+	- fitness:  0.005658333333333212
+turtle 13:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'C'}
+	- fitness:  0.005658333333333212
+turtle 14:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'C'}
+	- fitness:  0.005658333333333212
+turtle 15:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'C+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 16:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'C'}
+	- fitness:  0.005658333333333212
+turtle 17:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 18:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'A+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+turtle 19:
+	- axiom:    D
+	- t.-rules: {'D': '-D[DD]-B-', 'A': 'D', 'B': 'C+', 'C': 'D'}
+	- fitness:  0.005658333333333212
+
+Process finished with exit code 0
