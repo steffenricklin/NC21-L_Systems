@@ -9,9 +9,13 @@ import src.utils as utils
 
 
 def calculate_hu_fitness(coordinates, optimal):
+    """Calculates the fitness using hu moments.
+    solution: solution produced by the current rules (in string form)
+
+    :param coordinates: coordinates (x,y) of a LSystem
+    :param optimal: goal system as numpy array
+    :return: float fitness value
     """
-  solution: solution produced by the current rules (in string form)
-  """
     x, y = coordinates
     numpy_sol = utils.turn_coords_to_numpy(x, y)
     numpy_sol = np.reshape(numpy_sol[:, :, 0], (480, 640, 1))
@@ -20,6 +24,11 @@ def calculate_hu_fitness(coordinates, optimal):
 
 
 def convex_hull_defect_fitness(coordinates, optimal):
+    """Computes a fitness value based on convex hull defects
+
+    :param coordinates: coordinates (x,y) of a LSystem
+    :param optimal: goal system/as_numpy (not needed?)
+    """
     # optimal_coord = optimal.to_coords()
     current_chd_distances = calculate_convexity_defects(coordinates)
     # optimal_chd_distances = calculate_convexity_defects(optimal_coord)
@@ -33,20 +42,14 @@ def convex_hull_defect_fitness(coordinates, optimal):
 
 
 def calculate_convexity_defects(coordinates):
+    """Computes the convexity defects of the given coordinates of a LSystem
 
-    """
-    return: convexivity defects of the current structure
+    :param coordinates: coordinates (x,y) of a LSystem
+    return: convexity defects of the current structure
     """
     x, y = coordinates
     numpy_sol = utils.turn_coords_to_numpy(x, y)
     gray = cv2.cvtColor(numpy_sol, cv2.COLOR_BGR2GRAY)
-
-    '''
-    numpy_sol = np.reshape(numpy_sol[:, :, 0], (480, 640,1))
-    numpy_sol_2 = cv2.cvtColor(numpy_sol, cv2.COLOR_GRAY2BGR)
-    print(numpy_sol)
-    print(numpy_sol_2)
-    '''
 
     conts, hierarchy = cv2.findContours(gray.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(conts, key=lambda l: cv2.contourArea(l), reverse=True)
@@ -54,16 +57,6 @@ def calculate_convexity_defects(coordinates):
 
     defects = cv2.convexityDefects(contours[1], hull)
     return defects
-
-    """
-    struct CvConvexityDefect
-{
-   CvPoint* start; // point of the contour where the defect begins
-   CvPoint* end; // point of the contour where the defect ends
-   CvPoint* depth_point; // the farthest from the convex hull point within the defect
-   float depth; // distance between the farthest point and the convex hull
-};
-    """
 
 
 def calculate_rms(x1, x2):
