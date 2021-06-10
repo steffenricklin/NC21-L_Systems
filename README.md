@@ -11,7 +11,8 @@ We may update this project today (10.06.2021) with a requirements.txt so you can
 
 ### Running a simulation
 
-To run a simulation run the `src/main.py file`.
+To run a simulation run the `src/main.py` file. From our tests, this does not work from the command line. We recommend 
+using an IDE like PyCharm to run this project.  
 
 #### Changing settings
 
@@ -41,10 +42,6 @@ goal = LSystem(axiom='A',
                angle=parameters["angle"],
                iterations=parameters["iterations"])
 ```
-
-We will try to upload an updated main.py today (10.06.2021), so you may also run the file via the command line.
-
-
 
 ### Sample run
 
