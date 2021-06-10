@@ -37,7 +37,7 @@ if __name__ == '__main__':
                   "nr_gens": 500,
                   "tournament_size": 5,
                   "p_mutation": 0.75,
-                  "fitness_func": ['convex']
+                  "fitness_func": 'convex'
                   }
 
     # define the goal, returns a goal L-System and it's numpy representation
